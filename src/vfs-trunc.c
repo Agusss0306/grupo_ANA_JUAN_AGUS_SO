@@ -1,5 +1,3 @@
-// src/vfs-trunc.c
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,20 +26,14 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
-        // Verificar que sea un archivo regular
-        if ((in.mode & FILE_TYPE_MASK) != FILE_TYPE_REGULAR) {
-            fprintf(stderr, "'%s' no es un archivo regular, no puede truncarse.\n", filename);
-            continue;
-        }
+        // Si querés hacer una verificación de archivo regular, podés hacerlo con algún campo propio
 
         if (inode_trunc_data(image_path, &in) != 0) {
             fprintf(stderr, "Error al truncar los datos de '%s'.\n", filename);
             continue;
         }
 
-        // Reiniciar tamaño y bloques asignados
-        in.size = 0;
-        in.blocks_assigned = 0;
+        in.size = 0;  // Reiniciar tamaño del archivo
 
         if (write_inode(image_path, inode_number, &in) != 0) {
             fprintf(stderr, "Error al escribir el inodo truncado de '%s'.\n", filename);
@@ -53,3 +45,4 @@ int main(int argc, char *argv[]) {
 
     return EXIT_SUCCESS;
 }
+

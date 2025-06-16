@@ -1,5 +1,3 @@
-// src/vfs-ls.c
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -27,7 +25,8 @@ int main(int argc, char *argv[]) {
     }
 
     uint8_t buffer[BLOCK_SIZE];
-    if (read_block(image_path, root_inode.blocks[0], buffer) != 0) {
+    int block_nbr = get_block_number_at(image_path, &root_inode, 0);
+    if (block_nbr < 0 || read_block(image_path, block_nbr, buffer) != 0) {
         fprintf(stderr, "Error al leer el bloque de datos del directorio raíz.\n");
         return EXIT_FAILURE;
     }
@@ -36,17 +35,18 @@ int main(int argc, char *argv[]) {
     size_t max_entries = BLOCK_SIZE / sizeof(struct dir_entry);
 
     for (size_t i = 0; i < max_entries; i++) {
-        if (entries[i].inode_number == 0)
-            continue; // Entrada vacía
+        if (entries[i].inode == 0)
+            continue;
 
         struct inode file_inode;
-        if (read_inode(image_path, entries[i].inode_number, &file_inode) != 0) {
-            fprintf(stderr, "No se pudo leer el inodo %u\n", entries[i].inode_number);
+        if (read_inode(image_path, entries[i].inode, &file_inode) != 0) {
+            fprintf(stderr, "No se pudo leer el inodo %u\n", entries[i].inode);
             continue;
         }
 
-        print_inode(&file_inode, entries[i].inode_number, entries[i].filename);
+        print_inode(&file_inode, entries[i].inode, entries[i].name);
     }
 
     return EXIT_SUCCESS;
 }
+

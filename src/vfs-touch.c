@@ -20,9 +20,13 @@ int main (int argc, char *argv[]) {
 			continue;
 		}
 		
-		if (dir_lookup(image_path, filename) <= 0) {
+		int res = dir_lookup(image_path, filename);
+		if (res > 0){
 			fprintf(stderr, "Error: el archivo '%s' ya existe en el directorio.\n", filename);
 			continue;
+		} else if (res < 0) {
+   			 fprintf(stderr, "Error: no se pudo verificar la existencia de '%s'.\n", filename);
+   			 continue;
 		}
 
 		int inode_number = create_empty_file_in_free_inode(image_path, 0644); // permisos rw-r--r

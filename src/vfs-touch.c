@@ -20,7 +20,7 @@ int main (int argc, char *argv[]) {
 			continue;
 		}
 		
-		if (dir_lookup(image_path, filename) >= 0) {
+		if (dir_lookup(image_path, filename) <= 0) {
 			fprintf(stderr, "Error: el archivo '%s' ya existe en el directorio.\n", filename);
 			continue;
 		}

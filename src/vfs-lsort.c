@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 	int count = 0;
 
 	// se filtran entradas validas (inode != 0 y no son "." o "..")
-	for (int i=0; i < MAX_ENTRIES, ++i) {
+	for (int i=0; i < MAX_ENTRIES; ++i) {
 		if (entries[i].inode != 0 && strcmp(entries[i].name, ".") != 0 && strcmp(entries[i].name, "..") != 0) {
 			// se copia la entrada valida al array
 			valid_entries[count++] = entries[i];
